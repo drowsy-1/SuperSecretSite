@@ -19,9 +19,9 @@ export default function DetailView({ daylily, isOpen, onClose }: DetailViewProps
             <DialogContent>
                 <div className="relative">
                     <Button
-                        variant="ghost"
+                        variant="secondary"
                         size="icon"
-                        className="absolute right-2 top-2 z-10"
+                        className="absolute right-2 top-2 z-10 bg-background/80 p-2 rounded-lg shadow-md hover:bg-destructive hover:text-destructive-foreground transition-colors backdrop-blur-sm"
                         onClick={onClose}
                     >
                         <X className="h-5 w-5" />

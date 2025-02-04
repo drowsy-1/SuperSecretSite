@@ -163,9 +163,9 @@ export default function DaylilyGallery() {
     if (!mounted) return null;
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background flex flex-col">
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur">
+            <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
                 <div className="container mx-auto p-4">
                     <div className="flex justify-between items-center">
                         <h1 className="text-2xl font-bold">Daylily Gallery</h1>
@@ -185,6 +185,7 @@ export default function DaylilyGallery() {
                                 <Button
                                     variant="outline"
                                     className="h-auto min-h-[40px] px-4 py-2"
+                                    onClick={() => setIsFilterOpen(true)}
                                 >
                                     About & Contact
                                 </Button>
@@ -209,7 +210,7 @@ export default function DaylilyGallery() {
             />
 
             {/* Main Content */}
-            <main className="container mx-auto px-4 pt-20 pb-8">
+            <main className="flex-1 container mx-auto px-4 py-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredDaylilies.slice(0, page * 32).map((daylily) => (
                         <Card
