@@ -7,8 +7,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Daylily Gallery',
-    description: 'A comprehensive gallery of daylily varieties',
+    title: 'Rice Daylilies',
+    description: 'A comprehensive gallery of daylily varieties bred by John and Annette Rice',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
