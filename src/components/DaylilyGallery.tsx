@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
@@ -12,6 +10,7 @@ import FilterPanel from './FilterPanel';
 import DetailView from './DetailView';
 import { Card, CardContent } from './ui/card';
 
+const ITEMS_PER_PAGE = 32;
 
 export default function DaylilyGallery() {
     const [mounted, setMounted] = useState(false);
@@ -19,10 +18,15 @@ export default function DaylilyGallery() {
     const [selectedDaylily, setSelectedDaylily] = useState<Daylily | null>(null);
     const [daylilies, setDaylilies] = useState<Daylily[]>([]);
     const [filteredDaylilies, setFilteredDaylilies] = useState<Daylily[]>([]);
+    const [displayedDaylilies, setDisplayedDaylilies] = useState<Daylily[]>([]);
     const [filters, setFilters] = useState<FilterState>(INITIAL_FILTER_STATE);
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const { resolvedTheme, setTheme } = useTheme();
+
+    const observerRef = useRef<IntersectionObserver | null>(null);
+    const loadingRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setMounted(true);
@@ -37,12 +41,13 @@ export default function DaylilyGallery() {
             const parsedData: Daylily[] = lines.map(line => JSON.parse(line));
             setDaylilies(parsedData);
             setFilteredDaylilies(parsedData);
+            setDisplayedDaylilies(parsedData.slice(0, ITEMS_PER_PAGE));
+            setHasMore(parsedData.length > ITEMS_PER_PAGE);
         } catch (error) {
             console.error('Error loading data:', error);
         }
     };
 
-    //const filterDaylilies = useEffect(() => {
     useEffect(() => {
         let filtered = [...daylilies];
 
@@ -149,16 +154,59 @@ export default function DaylilyGallery() {
             );
         }
 
-
         // Foliage type
         if (filters.foliageType) {
             filtered = filtered.filter(d => d.foliage_type === filters.foliageType);
         }
 
         setFilteredDaylilies(filtered);
+        setDisplayedDaylilies(filtered.slice(0, ITEMS_PER_PAGE));
         setPage(1);
-        setHasMore(filtered.length > 20);
+        setHasMore(filtered.length > ITEMS_PER_PAGE);
     }, [filters, daylilies]);
+
+    const loadMoreItems = useCallback(() => {
+        if (loading || !hasMore) return;
+
+        setLoading(true);
+        const nextPage = page + 1;
+        const startIndex = (nextPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        const newItems = filteredDaylilies.slice(0, endIndex);
+
+        setDisplayedDaylilies(newItems);
+        setPage(nextPage);
+        setHasMore(endIndex < filteredDaylilies.length);
+        setLoading(false);
+    }, [loading, hasMore, page, filteredDaylilies]);
+
+    useEffect(() => {
+        const options = {
+            root: null,
+            rootMargin: '100px',
+            threshold: 0.1,
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            const [entry] = entries;
+            if (entry.isIntersecting && hasMore && !loading) {
+                loadMoreItems();
+            }
+        }, options);
+
+        observerRef.current = observer;
+
+        const currentLoadingRef = loadingRef.current;
+        if (currentLoadingRef) {
+            observer.observe(currentLoadingRef);
+        }
+
+        return () => {
+            if (currentLoadingRef) {
+                observer.unobserve(currentLoadingRef);
+            }
+        };
+    }, [loadMoreItems, hasMore, loading]);
 
     if (!mounted) return null;
 
@@ -185,7 +233,6 @@ export default function DaylilyGallery() {
                                 <Button
                                     variant="outline"
                                     className="h-auto min-h-[40px] px-4 py-2"
-                                    onClick={() => setIsFilterOpen(true)}
                                 >
                                     About & Contact
                                 </Button>
@@ -212,7 +259,7 @@ export default function DaylilyGallery() {
             {/* Main Content */}
             <main className="flex-1 container mx-auto px-4 py-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {filteredDaylilies.slice(0, page * 32).map((daylily) => (
+                    {displayedDaylilies.map((daylily) => (
                         <Card
                             key={daylily.name}
                             className="cursor-pointer hover:shadow-lg transition-shadow"
@@ -236,14 +283,18 @@ export default function DaylilyGallery() {
                         </Card>
                     ))}
                 </div>
+
+                {/* Loading indicator and intersection observer target */}
                 {hasMore && (
-                    <div className="mt-8 text-center">
-                        <Button onClick={() => {
-                            setPage(p => p + 1);
-                            setHasMore(filteredDaylilies.length > (page + 1) * 20);
-                        }}>
-                            Load More
-                        </Button>
+                    <div
+                        ref={loadingRef}
+                        className="w-full h-20 flex items-center justify-center mt-8"
+                    >
+                        {loading && (
+                            <div className="animate-pulse text-muted-foreground">
+                                Loading more daylilies...
+                            </div>
+                        )}
                     </div>
                 )}
             </main>
