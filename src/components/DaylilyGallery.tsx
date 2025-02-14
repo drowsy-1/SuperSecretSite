@@ -168,7 +168,7 @@ export default function DaylilyGallery() {
             <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
                 <div className="container mx-auto p-4">
                     <div className="flex justify-between items-center">
-                        <h1 className="text-2xl font-bold">Rice Daylily</h1>
+                        <h1 className="text-2xl font-bold">Rice Daylilies</h1>
                         <div className="flex items-center gap-2">
                             <Button
                                 variant="ghost"
