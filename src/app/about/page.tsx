@@ -2,12 +2,15 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import Image from 'next/image'
-
-
-
+import { Mail, Phone, MapPin, Calendar, Info, ExternalLink } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AboutPage() {
+    const emailAddress = 'daylilycat68@gmail.com';
+    const phoneNumber = '(859) 435-0000';
+    const emailSubject = 'Rice Daylilies Inquiry';
+    const emailBody = 'Hello, I am interested in learning more about your daylilies.';
+
     return (
         <div className="min-h-screen bg-background">
             {/* Header */}
@@ -18,10 +21,7 @@ export default function AboutPage() {
                             <h1 className="text-2xl font-bold cursor-pointer">Rice Daylilies</h1>
                         </Link>
                         <Link href="/">
-                            <Button
-                                variant="outline"
-                                className="h-auto min-h-[40px] px-4 py-2"
-                                >
+                            <Button variant="outline" className="h-auto min-h-[40px] px-4 py-2">
                                 Back to Gallery
                             </Button>
                         </Link>
@@ -42,113 +42,179 @@ export default function AboutPage() {
                         />
                     </div>
 
+                    {/* Introduction Card */}
                     <Card>
-
                         <CardHeader>
-                            <CardTitle>About Us</CardTitle>
+                            <CardTitle className="text-2xl">
+                                About Rice Daylilies
+                            </CardTitle>
                         </CardHeader>
                         <CardContent className="prose dark:prose-invert">
                             <p>
-                                Welcome to Rice Daylilies, formerly Thoroughbred Daylilies, the home and vision
-                                of John and Annette Rice. Nestled on 10 beautiful acres in Bourbon County—just
-                                15 miles east of downtown Lexington, Kentucky—our farm is dedicated to cultivating
-                                and sharing the beauty of daylilies. We currently have over 2 acres planted in these
-                                exceptional flowers, featuring hundreds of named cultivars and tens of thousands of
-                                seedlings that are part of our robust hybridizing program.
+                                Welcome to Rice Daylilies, a premier daylily breeding farm in Kentucky's Bourbon County,
+                                where award-winning horticulturalist and Vietnam veteran John Rice and his wife Annette
+                                have spent over 25 years perfecting exceptional daylilies. Located just 15 miles east
+                                of Lexington, our 10-acre farm showcases both diploid and tetraploid varieties, with
+                                2 acres dedicated to cultivating exceptional northern and southern-hardy daylily.
                             </p>
-                            <br/>
-                            <p>
-                                While our early work focused on tetraploid daylilies beginning in 1991, we have
-                                since
-                                shifted our attention to diploid daylilies. We chose to revisit our original diploid
-                                introductions because they embodied the characteristics we value most: hardiness,
-                                vigor,
-                                sturdy scapes, and especially clear, vibrant colors in the violet, lavender, and
-                                purple
-                                range. Over the years, we’ve acquired and evaluated hundreds of diploid
-                                cultivars—both
-                                new and old—to enrich our breeding stock. In previous seasons, we've plant thousands
-                                of seeds and are continually excited to see how these unique crosses flourish in our
-                                fields.
-                            </p>
-                            <br/>
-                            <p>
-                                Unlike many hybridizers who work in controlled greenhouse environments, we do all
-                                our
-                                breeding and growing outside in the ground. This approach ensures that our plants
-                                thrive under real-world conditions, making them more resilient and garden-worthy. It
-                                does mean that we often wait two to three years to see what our seedlings are truly
-                                capable of—but the reward of strong, beautiful daylilies is worth the patience.
-                            </p>
-                            <br/>
-                            <p>
-                                Peak bloom occurs from late June through mid-July, with some varieties continuing
-                                well into August and even September. Whether you’re looking for mid-late or
-                                late-blooming daylilies—or even rebloomers—you’ll find a wide array of options here.
-                                We
-                                welcome
-                                visitors by appointment only. This helps us give you the personalized attention and
-                                guidance you
-                                deserve, whether you’re selecting daylilies for your garden or simply enjoying the
-                                beauty
-                                of the blooms.
-                            </p>
-                            <br/>
-                            <p>
-                                We offer a large selection of daylilies for purchase. We’re happy to ship throughout
-                                the
-                                United States. If you have any questions, don’t hesitate to reach out by email,
-                                we’re always here to
-                                help you find the perfect daylily.
-                            </p>
-                            <br/>
-                            <p>
-                                Thank you for your interest in Rice Daylilies. We look forward to sharing the
-                                vibrant colors and hardy beauty of our unique and beautiful blooms with you soon!
-                            </p>
-
-                            {/* Add your about content here */}
                         </CardContent>
                     </Card>
 
+                    {/* Breeding Programs Card */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Contact Information</CardTitle>
+                            <CardTitle className="text-2xl">Our Breeding Programs</CardTitle>
+                        </CardHeader>
+                        <CardContent className="prose dark:prose-invert">
+                            <h3 className="font-bold">Innovative Diploid Program</h3>
+                            <p className="mt-1">
+                                Our current breeding focus centers on creating exceptional diploid daylilies
+                                that push the boundaries of color and form. We're particularly known for our
+                                breakthrough work with color ranges from light to deep purple, along with
+                                distinctive blues and lavenders. Blue Dolphin, one of our cornerstone varieties,
+                                is prized by hybridizers for its exceptional plant habits, especially the large
+                                flowers, thick scapes, and waxy substance. Dream Sequence has become a foundation
+                                plant for hybridizers working to introduce teeth in diploids.
+                            </p>
+
+                            <h3 className="font-bold mt-3">Our collection features varieties with unusual and desired traits such as:</h3>
+                            <ul className=" list-none space-y-2 pl-0">
+                                <li>• Pleating - a rare and little-known trait</li>
+                                <li>• Blue eye bands</li>
+                                <li>• Crested or bearded forms</li>
+                                <li>• Near-black to near-white color ranges</li>
+                                <li>• Pronounced green eyes</li>
+                                <li>• Large flowers exceeding 7 inches</li>
+                            </ul>
+
+                            <h3 className="font-bold mt-4">Legacy Tetraploid Collection</h3>
+                            <p className="mt-1">
+                                While our current focus is diploids, we maintain an impressive collection
+                                of both classic and new tetraploid varieties. Our earlier tetraploid
+                                introductions remain widely grown and are known for their thick substance,
+                                clarity of color, sun-fastness, ruffled edges, sculptured forms, and distinctive
+                                teeth. With some fan favorites being Old Friends, Redneck Red, Jackie Canner, Truly
+                                Angelic, Hey Mr.Bud, Bass Gibson, and Crowning Achievement.
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    {/* Growing Conditions Card */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-2xl">Growing Conditions & Bloom Season</CardTitle>
+                        </CardHeader>
+                        <CardContent className="prose dark:prose-invert">
+                            <p className="mt-1">
+                                Unlike greenhouse operations, we grow all our daylily in natural outdoor conditions,
+                                ensuring exceptional garden hardiness in both northern and southern climates. This
+                                realistic growing environment produces resilient, garden-worthy plants that
+                                consistently perform well across diverse growing zones.
+                            </p>
+                            <p className="mt-2">
+                                Peak bloom occurs from late June through mid-July, with some flowering into August
+                                and September. Our collection includes primarily mid-late and late-blooming
+                                varieties, plus reliable rebloomers.
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    {/* Purchasing Information Card */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-2xl">Purchasing Information</CardTitle>
+                        </CardHeader>
+                        <CardContent className="prose dark:prose-invert">
+                            <p className="font-medium text-primary">
+                                All sales are conducted via email or in-person. Contact us for current availability and pricing.
+                            </p>
+                            <ul className="list-none space-y-2 pl-0 pt-1 mt-1">
+                                <li>• Shipping: $16 per order, plus $2 for each for each
+                                    additional division above 5 or
+                                    more
+                                </li>
+                                <li>• We can only ship to mainland United States</li>
+                                <li>• Cash or check preferred</li>
+                                <li>• Located in AHS/ADS Region 10</li>
+                                <li>• USDA Zone 6</li>
+                            </ul>
+                        </CardContent>
+                    </Card>
+
+                    {/* Contact Information Card */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-2xl">
+                                Contact Information
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="space-y-4">
-                                <div>
-                                    <h3 className="font-semibold mb-2">Location</h3>
-                                    <p>6615 Briar Hill Road</p>
-                                    <p>Paris, KY 40361 </p>
-                                </div>
+                            <div className="space-y-6">
+                                <div className="space-y-6">
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <MapPin className="h-5 w-5 flex-shrink-0" />
+                                            <h3 className="font-semibold">Location</h3>
+                                        </div>
+                                        <a
+                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('6615 Briar Hill Road Paris KY 40361-9064')}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 p-2 text-primary hover:text-primary/80"
+                                        >
+                                            <div>
+                                                <p>6615 Briar Hill Road</p>
+                                                <p>Paris, KY 40361-9064</p>
+                                            </div>
+                                            <ExternalLink className="h-4 w-4" />
+                                        </a>
+                                    </div>
 
-                                <div>
-                                    <h3 className="font-semibold mb-2">Contact Details</h3>
-                                    <p>Email: daylilycat68@gmail.com</p>
-                                    <p>Phone: (859) 435-0000</p>
-                                </div>
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Mail className="h-5 w-5 flex-shrink-0 text-primary" />
+                                            <h3 className="font-semibold">Email Us</h3>
+                                        </div>
+                                        <a
+                                            href={`mailto:${emailAddress}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}
+                                            className="text-primary hover:text-primary/80 flex items-center gap-2"
+                                        >
+                                            {emailAddress}
+                                            <ExternalLink className="h-4 w-4" />
+                                        </a>
+                                    </div>
 
-                                {/*<div>
-                                    <h3 className="font-semibold mb-2">Hours of Operation</h3>
-                                    <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
-                                    <p>Saturday: By Appointment</p>
-                                    <p>Sunday: Closed</p>
-                                </div>*/}
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Phone className="h-5 w-5 flex-shrink-0" />
+                                            <h3 className="font-semibold">Phone</h3>
+                                        </div>
+                                        <a
+                                            href={`tel:${phoneNumber.replace(/\D/g, '')}`}
+                                            className="hover:text-primary/80 flex items-center gap-2"
+                                        >
+                                            {phoneNumber}
+                                            <ExternalLink className="h-4 w-4" />
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
 
+                    {/* Visiting Guidelines Card */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Visiting Guidelines</CardTitle>
+                            <CardTitle className="text-2xl">
+                                Visiting Guidelines
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <ul className="list-disc pl-6 space-y-2">
-                                <li>Please email ahead of time to schedule a visit</li>
-                                <li>Peak bloom season is typically June through July</li>
+                                <li>Please email ahead to schedule your visit</li>
+                                <li>Peak bloom season: June through July</li>
                                 <li>Garden tours available by appointment only</li>
-                                {/* Add more guidelines as needed */}
+                                <li>Personalized selection assistance provided</li>
                             </ul>
                         </CardContent>
                     </Card>
