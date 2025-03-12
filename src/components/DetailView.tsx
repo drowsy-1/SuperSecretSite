@@ -1,11 +1,9 @@
-'use client';
-
-import { X } from 'lucide-react';
+import { X, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Daylily } from '@/types/daylily';
-import { getImageUrl } from '@/lib/constants';
+import { getImageUrl, DEFAULT_IMAGE_PATH } from '@/lib/constants';
 
 interface DetailViewProps {
     daylily: Daylily;
@@ -35,15 +33,35 @@ export default function DetailView({ daylily, isOpen, onClose }: DetailViewProps
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             priority
                             className="object-cover rounded-lg"
+                            onError={(e) => {
+                                const img = e.target as HTMLImageElement;
+                                img.src = DEFAULT_IMAGE_PATH;
+                            }}
                         />
                     </div>
 
                     <div className="space-y-6">
-                        <div>
-                            <h2 className="text-2xl font-bold">{daylily.name}</h2>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between gap-4">
+                                <h2 className="text-2xl font-bold">{daylily.name}</h2>
+                                {daylily.price && (
+                                    <p className="text-2xl font-medium text-green-600 dark:text-green-400">
+                                        ${daylily.price}
+                                    </p>
+                                )}
+                            </div>
                             <p className="text-lg text-muted-foreground">
                                 {daylily.hybridizer} ({daylily.year})
                             </p>
+                            <a
+                                href={`mailto:annettesmagic22@icloud.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20-DTV%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
+                                className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                            >
+                                <span className="italic group-hover:underline">
+                                    {daylily.availability || "Email For Availability"}
+                                </span>
+                                <Mail className="h-4 w-4 transition-colors group-hover:text-primary" />
+                            </a>
                         </div>
 
                         <div className="space-y-4">
@@ -107,18 +125,40 @@ export default function DetailView({ daylily, isOpen, onClose }: DetailViewProps
                             )}
                             {daylily["seedling_#"] && (
                                 <p className="text-sm">
-                                <span className="font-medium">Seedling #:</span> {daylily["seedling_#"]}
-                        </p>
+                                    <span className="font-medium">Seedling #:</span> {daylily["seedling_#"]}
+                                </p>
+                            )}
+                            {daylily.notes && (
+                                <p className="text-sm">
+                                    <span className="font-medium">Notes:</span> {daylily.notes}
+                                </p>
+                            )}
+                        </div>
+
+                        {daylily.description && (
+                            <div className="space-y-2">
+                                <h3 className="text-lg font-semibold">Description</h3>
+                                <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                    {daylily.description}
+                                </p>
+                            </div>
                         )}
-                        {daylily.notes && (
-                            <p className="text-sm">
-                                <span className="font-medium">Notes:</span> {daylily.notes}
-                            </p>
+
+                        {daylily.learn_more_url && (
+                            <div className="mt-4">
+                                <a
+                                    href={daylily.learn_more_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring h-9 px-4 py-2 bg-primary text-primary-foreground shadow hover:bg-primary/90"
+                                >
+                                    Learn More
+                                </a>
+                            </div>
                         )}
                     </div>
                 </div>
-            </div>
-        </DialogContent>
-</Dialog>
-);
+            </DialogContent>
+        </Dialog>
+    );
 }

@@ -20,6 +20,10 @@ export interface Daylily {
     form?: string;
     sculpting?: string;
     notes?: string;
+    price?: string;
+    availability?: string;
+    description?: string;
+    learn_more_url?: string;
 }
 
 export interface FilterState {

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Sun, Moon } from 'lucide-react';
+import {Sun, Moon, Mail} from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Daylily, FilterState, INITIAL_FILTER_STATE } from '@/types/daylily';
-import { getImageUrl } from '@/lib/constants';
+import { getImageUrl, DEFAULT_IMAGE_PATH } from '@/lib/constants';
 import FilterPanel from './FilterPanel';
 import DetailView from './DetailView';
 import { Card, CardContent } from './ui/card';
@@ -272,13 +272,33 @@ export default function DaylilyGallery() {
                                     fill
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     className="object-cover rounded-t-xl"
+                                    onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        img.src = DEFAULT_IMAGE_PATH;
+                                    }}
                                 />
                             </div>
                             <CardContent className="p-4">
-                                <h2 className="font-semibold truncate">{daylily.name}</h2>
+                                <div className="flex justify-between items-start gap-2">
+                                    <h2 className="font-semibold truncate">{daylily.name}</h2>
+                                    {daylily.price && (
+                                        <span className="text-sm font-medium text-green-600 dark:text-green-400 whitespace-nowrap">
+                                            ${daylily.price}
+                                        </span>
+                                    )}
+                                </div>
                                 <p className="text-sm text-muted-foreground">
                                     {daylily.hybridizer} ({daylily.year})
                                 </p>
+                                <a
+                                    href={`mailto:annettesmagic22@icloud.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20-GV%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
+                                    className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                                >
+                                <span className="italic group-hover:underline">
+                                    {daylily.availability || "Email For Availability"}
+                                </span>
+                                    <Mail className="h-4 w-4 transition-colors group-hover:text-primary"/>
+                                </a>
                             </CardContent>
                         </Card>
                     ))}

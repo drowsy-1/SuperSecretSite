@@ -6,7 +6,7 @@ import { Mail, Phone, MapPin, Calendar, Info, ExternalLink } from 'lucide-react'
 import Image from 'next/image';
 
 export default function AboutPage() {
-    const emailAddress = 'daylilycat68@gmail.com';
+    const emailAddress = 'annettesmagic22@icloud.com';
     const phoneNumber = '(859) 435-0000';
     const emailSubject = 'Rice Daylilies Inquiry';
     const emailBody = 'Hello, I am interested in learning more about your daylilies.';
@@ -77,11 +77,11 @@ export default function AboutPage() {
                                 plant for hybridizers working to introduce teeth in diploids.
                             </p>
 
-                            <h3 className="font-bold mt-3">Our collection features varieties with unusual and desired traits such as:</h3>
+                            <h3 className="font-bold mt-3">Our collection features varieties with:</h3>
                             <ul className=" list-none space-y-2 pl-0">
-                                <li>• Pleating - a rare and little-known trait</li>
+                                <li>• Embossment - a rare and little-known trait </li>
                                 <li>• Blue eye bands</li>
-                                <li>• Crested or bearded forms</li>
+                                <li>• Cristate or bearded forms </li>
                                 <li>• Near-black to near-white color ranges</li>
                                 <li>• Pronounced green eyes</li>
                                 <li>• Large flowers exceeding 7 inches</li>
@@ -153,7 +153,7 @@ export default function AboutPage() {
                                 <div className="space-y-6">
                                     <div>
                                         <div className="flex items-center gap-2 mb-2">
-                                            <MapPin className="h-5 w-5 flex-shrink-0" />
+                                            <MapPin className="h-5 w-5 flex-shrink-0"/>
                                             <h3 className="font-semibold">Location</h3>
                                         </div>
                                         <a
@@ -166,13 +166,13 @@ export default function AboutPage() {
                                                 <p>6615 Briar Hill Road</p>
                                                 <p>Paris, KY 40361-9064</p>
                                             </div>
-                                            <ExternalLink className="h-4 w-4" />
+                                            <ExternalLink className="h-4 w-4"/>
                                         </a>
                                     </div>
 
                                     <div>
                                         <div className="flex items-center gap-2 mb-2">
-                                            <Mail className="h-5 w-5 flex-shrink-0 text-primary" />
+                                            <Mail className="h-5 w-5 flex-shrink-0 text-primary"/>
                                             <h3 className="font-semibold">Email Us</h3>
                                         </div>
                                         <a
@@ -180,13 +180,13 @@ export default function AboutPage() {
                                             className="text-primary hover:text-primary/80 flex items-center gap-2"
                                         >
                                             {emailAddress}
-                                            <ExternalLink className="h-4 w-4" />
+                                            <ExternalLink className="h-4 w-4"/>
                                         </a>
                                     </div>
 
                                     <div>
                                         <div className="flex items-center gap-2 mb-2">
-                                            <Phone className="h-5 w-5 flex-shrink-0" />
+                                            <Phone className="h-5 w-5 flex-shrink-0"/>
                                             <h3 className="font-semibold">Phone</h3>
                                         </div>
                                         <a
@@ -194,7 +194,7 @@ export default function AboutPage() {
                                             className="hover:text-primary/80 flex items-center gap-2"
                                         >
                                             {phoneNumber}
-                                            <ExternalLink className="h-4 w-4" />
+                                            <ExternalLink className="h-4 w-4"/>
                                         </a>
                                     </div>
                                 </div>
