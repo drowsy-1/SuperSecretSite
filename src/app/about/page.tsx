@@ -6,7 +6,7 @@ import { Mail, Phone, MapPin, Calendar, Info, ExternalLink } from 'lucide-react'
 import Image from 'next/image';
 
 export default function AboutPage() {
-    const emailAddress = 'annettesmagic22@icloud.com';
+    const emailAddress = 'daylilycat68@gmail.com';
     const phoneNumber = '(859) 435-0000';
     const emailSubject = 'Rice Daylilies Inquiry';
     const emailBody = 'Hello, I am interested in learning more about your daylilies.';
@@ -129,10 +129,7 @@ export default function AboutPage() {
                                 All sales are conducted via email or in-person. Contact us for current availability and pricing.
                             </p>
                             <ul className="list-none space-y-2 pl-0 pt-1 mt-1">
-                                <li>• Shipping: $16 per order, plus $2 for each for each
-                                    additional division above 5 or
-                                    more
-                                </li>
+                                <li>• Shipping: $12.00 for first plant plus $3.00 per each additional plant. Domestic shipping only. </li>
                                 <li>• We can only ship to mainland United States</li>
                                 <li>• Cash or check preferred</li>
                                 <li>• Located in AHS/ADS Region 10</li>
