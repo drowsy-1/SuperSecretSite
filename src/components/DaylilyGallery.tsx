@@ -7,15 +7,17 @@ import { Button } from '@/components/ui/button';
 import { Daylily, FilterState, INITIAL_FILTER_STATE } from '@/types/daylily';
 import { getImageUrl, DEFAULT_IMAGE_PATH } from '@/lib/constants';
 import FilterPanel from './FilterPanel';
-import DetailView from './DetailView';
 import { Card, CardContent } from './ui/card';
+import ClientImage from '@/components/ClientImage';
+import { createSlugFromName } from '@/lib/client-utils';
+
+// Remove any imports from daylily-data.ts
 
 const ITEMS_PER_PAGE = 32;
 
 export default function DaylilyGallery() {
     const [mounted, setMounted] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [selectedDaylily, setSelectedDaylily] = useState<Daylily | null>(null);
     const [daylilies, setDaylilies] = useState<Daylily[]>([]);
     const [filteredDaylilies, setFilteredDaylilies] = useState<Daylily[]>([]);
     const [displayedDaylilies, setDisplayedDaylilies] = useState<Daylily[]>([]);
@@ -224,9 +226,9 @@ export default function DaylilyGallery() {
                                 onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
                             >
                                 {resolvedTheme === 'dark' ? (
-                                    <Sun className="h-5 w-5" />
+                                    <Sun className="h-5 w-5"/>
                                 ) : (
-                                    <Moon className="h-5 w-5" />
+                                    <Moon className="h-5 w-5"/>
                                 )}
                             </Button>
                             <Link href="/about">
@@ -256,52 +258,50 @@ export default function DaylilyGallery() {
                 setFilters={setFilters}
             />
 
-            {/* Main Content */}
+            {/* src/components/DaylilyGallery.tsx - Main content section */}
             <main className="flex-1 container mx-auto px-4 py-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {displayedDaylilies.map((daylily) => (
-                        <Card
+                        <Link
                             key={daylily.name}
-                            className="cursor-pointer hover:shadow-lg transition-shadow"
-                            onClick={() => setSelectedDaylily(daylily)}
+                            href={`/daylily/${createSlugFromName(daylily.name)}`}
                         >
-                            <div className="aspect-square relative">
-                                <Image
-                                    src={getImageUrl(daylily.image_url)}
-                                    alt={daylily.name}
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    className="object-cover rounded-t-xl"
-                                    onError={(e) => {
-                                        const img = e.target as HTMLImageElement;
-                                        img.src = DEFAULT_IMAGE_PATH;
-                                    }}
-                                />
-                            </div>
-                            <CardContent className="p-4">
-                                <div className="flex justify-between items-start gap-2">
-                                    <h2 className="font-semibold truncate">{daylily.name}</h2>
-                                    {daylily.price && (
-                                        <span className="text-sm font-medium text-green-600 dark:text-green-400 whitespace-nowrap">
-                                            ${daylily.price}
-                                        </span>
-                                    )}
+                            <Card className="cursor-pointer hover:shadow-lg transition-shadow h-full">
+                                <div className="aspect-square relative">
+                                    <ClientImage
+                                        src={getImageUrl(daylily.image_url)}
+                                        alt={daylily.name}
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        className="object-cover rounded-t-xl"
+                                    />
                                 </div>
-                                <p className="text-sm text-muted-foreground">
-                                    {daylily.hybridizer} ({daylily.year})
-                                </p>
-                                <a
-                                    href={`mailto:daylilycat68@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20-GV%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
+                                <CardContent className="p-4">
+                                    <div className="flex justify-between items-start gap-2">
+                                        <h2 className="font-semibold truncate">{daylily.name}</h2>
+                                        {daylily.price && (
+                                            <span className="text-sm font-medium text-green-600 dark:text-green-400 whitespace-nowrap">
+                                              ${daylily.price}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">
+                                        {daylily.hybridizer} ({daylily.year})
+                                    </p>
+                                    <a
+                                    href={`mailto:daylilycat68@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
                                     className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-                                >
-                                <span className="italic group-hover:underline">
-                                    {daylily.availability || "Email For Availability"}
-                                </span>
+                                    onClick={(e) => e.stopPropagation()} // Prevent Link navigation
+                                    >
+                                    <span className="italic group-hover:underline">
+                                        {daylily.availability || "Email For Availability"}
+                                      </span>
                                     <Mail className="h-4 w-4 transition-colors group-hover:text-primary"/>
                                 </a>
                             </CardContent>
                         </Card>
-                    ))}
+                        </Link>
+                        ))}
                 </div>
 
                 {/* Loading indicator and intersection observer target */}
@@ -318,14 +318,6 @@ export default function DaylilyGallery() {
                     </div>
                 )}
             </main>
-
-            {selectedDaylily && (
-                <DetailView
-                    daylily={selectedDaylily}
-                    isOpen={!!selectedDaylily}
-                    onClose={() => setSelectedDaylily(null)}
-                />
-            )}
         </div>
     );
 }
