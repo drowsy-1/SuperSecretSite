@@ -1,3 +1,4 @@
+// src/app/category/[tag]/page.tsx
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, ArrowLeft } from 'lucide-react';
@@ -5,6 +6,7 @@ import { Metadata } from 'next';
 import { getDayliliesByTag, getAllTags } from '@/lib/daylily-data';
 import { getImageUrl, DEFAULT_IMAGE_PATH } from '@/lib/constants';
 import { Card, CardContent } from '@/components/ui/card';
+import { createSlugFromName } from '@/lib/client-utils';
 
 type Props = {
     params: { tag: string }
@@ -130,7 +132,7 @@ export default async function CategoryPage({ params }: Props) {
                     {daylilies.map((daylily) => (
                         <Link
                             key={daylily.name}
-                            href={`/daylily/${encodeURIComponent(daylily.name.toLowerCase().replace(/\s+/g, '-'))}`}
+                            href={`/daylily/${createSlugFromName(daylily.name)}`}
                             className="block group"
                         >
                             <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow">
@@ -152,8 +154,8 @@ export default async function CategoryPage({ params }: Props) {
                                         <h2 className="font-semibold truncate group-hover:text-primary transition-colors">{daylily.name}</h2>
                                         {daylily.price && (
                                             <span className="text-sm font-medium text-green-600 dark:text-green-400 whitespace-nowrap">
-                        ${daylily.price}
-                      </span>
+                                                ${daylily.price}
+                                            </span>
                                         )}
                                     </div>
                                     <p className="text-sm text-muted-foreground">
@@ -164,12 +166,30 @@ export default async function CategoryPage({ params }: Props) {
                                         className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer mt-2"
                                         onClick={(e) => e.stopPropagation()}
                                     >
-                    <span className="italic group-hover:underline text-sm">
-                      {daylily.availability || "Email For Availability"}
-                    </span>
+                                        <span className="italic group-hover:underline text-sm">
+                                            {daylily.availability || "Email For Availability"}
+                                        </span>
                                         <Mail className="h-3 w-3 transition-colors group-hover:text-primary" />
                                     </a>
                                 </CardContent>
                             </Card>
                         </Link>
                     ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+// Generate static paths for all category pages
+export async function generateStaticParams() {
+    try {
+        const allTags = await getAllTags();
+        return allTags.map(tag => ({
+            tag: encodeURIComponent(tag),
+        }));
+    } catch (error) {
+        console.error("Error generating category static params:", error);
+        return [];
+    }
+}
