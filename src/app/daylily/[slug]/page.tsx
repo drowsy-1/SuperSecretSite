@@ -332,6 +332,7 @@ export async function generateStaticParams() {
 }
 
 // Helper function to generate tags for a daylily
+// Helper function to generate tags for a daylily
 function generateTags(daylily: Daylily): string[] {
     const tags: string[] = [];
 
@@ -397,9 +398,9 @@ function generateTags(daylily: Daylily): string[] {
         tags.push('Fragrant');
     }
 
-    return [...new Set(tags)]; // Remove duplicates
+    // Remove duplicates using Array.from instead of spread operator
+    return Array.from(new Set(tags));
 }
-
 // Helper function to get related daylilies
 async function getRelatedDaylilies(daylily: Daylily): Promise<Daylily[]> {
     try {
@@ -452,7 +453,12 @@ async function getRelatedDaylilies(daylily: Daylily): Promise<Daylily[]> {
 
         // If we still need more, add random ones from remaining daylilies
         if (related.size < 4) {
-            const usedNames = new Set([...related].map(d => d.name).concat(daylily.name));
+            const usedNames = new Set();
+            // Add current daylily name and all related daylily names to the set
+            usedNames.add(daylily.name);
+            for (const item of related) {
+                usedNames.add(item.name);
+            }
 
             const remainingDaylilies = allDaylilies.filter(d => !usedNames.has(d.name));
 
@@ -464,7 +470,8 @@ async function getRelatedDaylilies(daylily: Daylily): Promise<Daylily[]> {
             }
         }
 
-        return [...related]; // Convert Set back to array
+        // Convert Set to Array without using spread operator
+        return Array.from(related);
     } catch (error) {
         console.error("Error getting related daylilies:", error);
         return []; // Return empty array on error
