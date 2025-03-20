@@ -87,6 +87,7 @@ export default async function DaylilyPage({ params }: Props) {
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 30vw"
                                         priority
                                         className="object-cover"
+                                        unoptimized={true}
                                     />
                                 </div>
                             </Card>
@@ -126,7 +127,7 @@ export default async function DaylilyPage({ params }: Props) {
                                     className="inline-block"
                                 >
                                     <Button className="gap-2">
-                                        <Mail className="h-4 w-4" />
+                                        <Mail className="h-4 w-4"/>
                                         <span>{daylily.availability || "Email For Availability"}</span>
                                     </Button>
                                 </a>
