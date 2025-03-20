@@ -1,12 +1,13 @@
 // src/app/category/[tag]/page.tsx
 import Link from 'next/link';
-import Image from 'next/image';
-import { Mail, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Sun, Moon } from 'lucide-react';
 import { Metadata } from 'next';
 import { getDayliliesByTag, getAllTags } from '@/lib/daylily-data';
-import { getImageUrl, DEFAULT_IMAGE_PATH } from '@/lib/constants';
+import { getImageUrl } from '@/lib/constants';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { createSlugFromName } from '@/lib/client-utils';
+import ClientImage from '@/components/ClientImage';
 
 type Props = {
     params: { tag: string }
@@ -88,95 +89,110 @@ export default async function CategoryPage({ params }: Props) {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            {/* Back link */}
-            <Link href="/" className="inline-flex items-center mb-6 text-primary hover:text-primary/80">
-                <ArrowLeft className="h-4 w-4 mr-1" />
-                Back to Gallery
-            </Link>
+        <div className="min-h-screen bg-background flex flex-col">
+            {/* Header - Now matches the main gallery view header */}
+            <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
+                <div className="container mx-auto p-4">
+                    <div className="flex justify-between items-center">
+                        <Link href="/">
+                            <h1 className="text-2xl font-bold">Rice Daylilies</h1>
+                        </Link>
+                        <div className="flex items-center gap-2">
+                            <Link href="/about">
+                                <Button
+                                    variant="outline"
+                                    className="h-auto min-h-[40px] px-4 py-2"
+                                >
+                                    About & Contact
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <h1 className="text-3xl font-bold">{tag} Daylilies</h1>
-                    <p className="text-muted-foreground mt-2">
-                        {daylilies.length} varieties available
-                    </p>
+            {/* Main content */}
+            <main className="flex-1 container mx-auto px-4 py-6">
+                {/* Back link */}
+                <Link href="/" className="inline-flex items-center mb-6 text-primary hover:text-primary/80">
+                    <ArrowLeft className="h-4 w-4 mr-1" />
+                    Back to Gallery
+                </Link>
+
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold">{tag} Daylilies</h1>
+                        <p className="text-muted-foreground mt-2">
+                            {daylilies.length} varieties available
+                        </p>
+                    </div>
+
+                    {/* Related categories */}
+                    {relatedCategories.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                            <span className="text-sm text-muted-foreground mr-2 self-center">Related:</span>
+                            {relatedCategories.map(relatedTag => (
+                                <Link
+                                    key={relatedTag}
+                                    href={`/category/${encodeURIComponent(relatedTag)}`}
+                                    className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm hover:bg-secondary/80 transition-colors"
+                                >
+                                    {relatedTag}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
-                {/* Related categories */}
-                {relatedCategories.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                        <span className="text-sm text-muted-foreground mr-2 self-center">Related:</span>
-                        {relatedCategories.map(relatedTag => (
+                {daylilies.length === 0 ? (
+                    <div className="text-center py-12">
+                        <p className="text-lg text-muted-foreground">No daylilies found in this category.</p>
+                        <Link href="/" className="text-primary hover:underline mt-4 inline-block">
+                            Return to Gallery
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {daylilies.map((daylily) => (
                             <Link
-                                key={relatedTag}
-                                href={`/category/${encodeURIComponent(relatedTag)}`}
-                                className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm hover:bg-secondary/80 transition-colors"
+                                key={daylily.name}
+                                href={`/daylily/${createSlugFromName(daylily.name)}`}
+                                className="block group"
                             >
-                                {relatedTag}
+                                <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow">
+                                    <div className="aspect-square relative">
+                                        <ClientImage
+                                            src={getImageUrl(daylily.image_url)}
+                                            alt={daylily.name}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            className="object-cover transition-transform group-hover:scale-105"
+                                        />
+                                    </div>
+                                    <CardContent className="p-4">
+                                        <div className="flex justify-between items-start gap-2">
+                                            <h2 className="font-semibold truncate group-hover:text-primary transition-colors">{daylily.name}</h2>
+                                            {daylily.price && (
+                                                <span className="text-sm font-medium text-green-600 dark:text-green-400 whitespace-nowrap">
+                                                    ${daylily.price}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-sm text-muted-foreground">
+                                            {daylily.hybridizer} ({daylily.year})
+                                        </p>
+                                        <div className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer mt-2">
+                                            <span className="italic group-hover:underline text-sm">
+                                                {daylily.availability || "Email For Availability"}
+                                            </span>
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             </Link>
                         ))}
                     </div>
                 )}
-            </div>
-
-            {daylilies.length === 0 ? (
-                <div className="text-center py-12">
-                    <p className="text-lg text-muted-foreground">No daylilies found in this category.</p>
-                    <Link href="/" className="text-primary hover:underline mt-4 inline-block">
-                        Return to Gallery
-                    </Link>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {daylilies.map((daylily) => (
-                        <Link
-                            key={daylily.name}
-                            href={`/daylily/${createSlugFromName(daylily.name)}`}
-                            className="block group"
-                        >
-                            <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow">
-                                <div className="aspect-square relative">
-                                    <Image
-                                        src={getImageUrl(daylily.image_url)}
-                                        alt={daylily.name}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        className="object-cover transition-transform group-hover:scale-105"
-                                        onError={(e) => {
-                                            const img = e.target as HTMLImageElement;
-                                            img.src = DEFAULT_IMAGE_PATH;
-                                        }}
-                                    />
-                                </div>
-                                <CardContent className="p-4">
-                                    <div className="flex justify-between items-start gap-2">
-                                        <h2 className="font-semibold truncate group-hover:text-primary transition-colors">{daylily.name}</h2>
-                                        {daylily.price && (
-                                            <span className="text-sm font-medium text-green-600 dark:text-green-400 whitespace-nowrap">
-                                                ${daylily.price}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">
-                                        {daylily.hybridizer} ({daylily.year})
-                                    </p>
-                                    <a
-                                        href={`mailto:daylilycat68@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20-GV%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
-                                        className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer mt-2"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        <span className="italic group-hover:underline text-sm">
-                                            {daylily.availability || "Email For Availability"}
-                                        </span>
-                                        <Mail className="h-3 w-3 transition-colors group-hover:text-primary" />
-                                    </a>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    ))}
-                </div>
-            )}
+            </main>
         </div>
     );
 }

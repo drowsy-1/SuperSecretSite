@@ -119,6 +119,7 @@ export default async function DaylilyPage({ params }: Props) {
                                 ))}
                             </div>
 
+
                             <div className="mt-4">
                                 <a
                                     href={`mailto:daylilycat68@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
@@ -331,7 +332,8 @@ export async function generateStaticParams() {
     }));
 }
 
-// Helper function to generate tags for a daylily
+// This is a partial update focusing on the tag generation and tag linking in the daylily slug page
+
 // Helper function to generate tags for a daylily
 function generateTags(daylily: Daylily): string[] {
     const tags: string[] = [];
@@ -401,6 +403,7 @@ function generateTags(daylily: Daylily): string[] {
     // Remove duplicates using Array.from instead of spread operator
     return Array.from(new Set(tags));
 }
+
 // Helper function to get related daylilies
 async function getRelatedDaylilies(daylily: Daylily): Promise<Daylily[]> {
     try {

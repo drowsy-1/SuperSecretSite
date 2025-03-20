@@ -10,6 +10,7 @@ import FilterPanel from './FilterPanel';
 import { Card, CardContent } from './ui/card';
 import ClientImage from '@/components/ClientImage';
 import { createSlugFromName } from '@/lib/client-utils';
+import TagsSection from './TagsSection';
 
 // Remove any imports from daylily-data.ts
 
@@ -250,6 +251,9 @@ export default function DaylilyGallery() {
                     </div>
                 </div>
             </header>
+
+            {/* Tags Section - Add this new section */}
+            <TagsSection initialExpanded={false} />
 
             <FilterPanel
                 isOpen={isFilterOpen}

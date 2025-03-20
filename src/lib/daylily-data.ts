@@ -6,6 +6,7 @@ import { createSlugFromName, getNameFromSlug } from './client-utils';
 
 // Cache for data
 let dayliliesCache: Daylily[] | null = null;
+let tagsCache: string[] | null = null;
 
 export async function getAllDaylilies(): Promise<Daylily[]> {
     if (dayliliesCache) return dayliliesCache;
@@ -70,96 +71,111 @@ export async function getDaylily(slug: string): Promise<Daylily | null> {
  * Get daylilies filtered by tag with improved character handling
  */
 export async function getDayliliesByTag(tag: string): Promise<Daylily[]> {
-    const daylilies = await getAllDaylilies();
-    const normalizedTag = tag.toLowerCase();
+    try {
+        const daylilies = await getAllDaylilies();
+        const normalizedTag = tag.toLowerCase().trim();
 
-    return daylilies.filter(daylily => {
-        // Check if tag matches color description, bloom season, foliage type, etc.
-        const fieldMatches = [
-            daylily.color_description,
-            daylily.bloom_season,
-            daylily.foliage_type,
-            daylily.ploidy,
-            daylily.form,
-            daylily.sculpting
-        ].some(field => field && field.toLowerCase().includes(normalizedTag));
+        return daylilies.filter(daylily => {
+            // Check if tag matches color description, bloom season, foliage type, etc.
+            const fieldMatches = [
+                daylily.color_description,
+                daylily.bloom_season,
+                daylily.foliage_type,
+                daylily.ploidy,
+                daylily.form,
+                daylily.sculpting
+            ].some(field => field && field.toLowerCase().includes(normalizedTag));
 
-        // For "rebloomer" tag, check if bloom_season contains "rebloom"
-        if (normalizedTag === "rebloomer") {
-            return daylily.bloom_season?.toLowerCase().includes("rebloom");
-        }
+            // For "rebloomer" tag, check if bloom_season contains "rebloom"
+            if (normalizedTag === "rebloomer") {
+                return daylily.bloom_season?.toLowerCase().includes("rebloom");
+            }
 
-        return fieldMatches;
-    });
+            return fieldMatches;
+        });
+    } catch (error) {
+        console.error(`Error getting daylilies for tag ${tag}:`, error);
+        return [];
+    }
 }
 
 /**
  * Get all available tags from the daylily collection
  */
 export async function getAllTags(): Promise<string[]> {
-    const daylilies = await getAllDaylilies();
-    const tags = new Set<string>();
+    // Return cached tags if available
+    if (tagsCache) return tagsCache;
 
-    // Extract tags from various daylily properties
-    daylilies.forEach(daylily => {
-        // Add ploidy as tag
-        if (daylily.ploidy) tags.add(daylily.ploidy);
+    try {
+        const daylilies = await getAllDaylilies();
+        const tags = new Set<string>();
 
-        // Add foliage type
-        if (daylily.foliage_type) tags.add(daylily.foliage_type);
+        // Extract tags from various daylily properties
+        daylilies.forEach(daylily => {
+            // Add ploidy as tag
+            if (daylily.ploidy) tags.add(daylily.ploidy);
 
-        // Parse and add bloom season tags
-        if (daylily.bloom_season) {
-            const seasonText = daylily.bloom_season.toLowerCase();
-            if (seasonText.includes('early')) tags.add('Early');
-            if (seasonText.includes('mid')) tags.add('Midseason');
-            if (seasonText.includes('late')) tags.add('Late');
-            if (seasonText.includes('rebloom')) tags.add('Rebloomer');
-        }
+            // Add foliage type
+            if (daylily.foliage_type) tags.add(daylily.foliage_type);
 
-        // Add color-based tags
-        if (daylily.color_description) {
-            const colorText = daylily.color_description.toLowerCase();
-            if (colorText.includes('purple')) tags.add('Purple');
-            if (colorText.includes('lavender')) tags.add('Lavender');
-            if (colorText.includes('blue')) tags.add('Blue');
-            if (colorText.includes('pink')) tags.add('Pink');
-            if (colorText.includes('red')) tags.add('Red');
-            if (colorText.includes('yellow')) tags.add('Yellow');
-            if (colorText.includes('orange')) tags.add('Orange');
-            if (colorText.includes('cream')) tags.add('Cream');
-            if (colorText.includes('white')) tags.add('White');
+            // Parse and add bloom season tags
+            if (daylily.bloom_season) {
+                const seasonText = daylily.bloom_season.toLowerCase();
+                if (seasonText.includes('early')) tags.add('Early');
+                if (seasonText.includes('mid')) tags.add('Midseason');
+                if (seasonText.includes('late')) tags.add('Late');
+                if (seasonText.includes('rebloom')) tags.add('Rebloomer');
+            }
 
-            // Add pattern/eye tags
-            if (colorText.includes('eye')) tags.add('Eye');
-            if (colorText.includes('edge')) tags.add('Edge');
-            if (colorText.includes('watermark')) tags.add('Watermark');
-            if (colorText.includes('throat')) tags.add('Green Throat');
-        }
+            // Add color-based tags
+            if (daylily.color_description) {
+                const colorText = daylily.color_description.toLowerCase();
+                if (colorText.includes('purple')) tags.add('Purple');
+                if (colorText.includes('lavender')) tags.add('Lavender');
+                if (colorText.includes('blue')) tags.add('Blue');
+                if (colorText.includes('pink')) tags.add('Pink');
+                if (colorText.includes('red')) tags.add('Red');
+                if (colorText.includes('yellow')) tags.add('Yellow');
+                if (colorText.includes('orange')) tags.add('Orange');
+                if (colorText.includes('cream')) tags.add('Cream');
+                if (colorText.includes('white')) tags.add('White');
 
-        // Add form tags
-        if (daylily.form) {
-            const formText = daylily.form.toLowerCase();
-            if (formText.includes('unusual')) tags.add('Unusual Form');
-            if (formText.includes('spider')) tags.add('Spider');
-            if (formText.includes('crispate')) tags.add('Crispate');
-            if (formText.includes('cascade')) tags.add('Cascade');
-        }
+                // Add pattern/eye tags
+                if (colorText.includes('eye')) tags.add('Eye');
+                if (colorText.includes('edge')) tags.add('Edge');
+                if (colorText.includes('watermark')) tags.add('Watermark');
+                if (colorText.includes('throat')) tags.add('Green Throat');
+            }
 
-        // Add special features
-        if (daylily.sculpting) {
-            tags.add('Sculpted');
+            // Add form tags
+            if (daylily.form) {
+                const formText = daylily.form.toLowerCase();
+                if (formText.includes('unusual')) tags.add('Unusual Form');
+                if (formText.includes('spider')) tags.add('Spider');
+                if (formText.includes('crispate')) tags.add('Crispate');
+                if (formText.includes('cascade')) tags.add('Cascade');
+            }
 
-            const sculptingText = daylily.sculpting.toLowerCase();
-            if (sculptingText.includes('cristate')) tags.add('Cristate');
-            if (sculptingText.includes('relief')) tags.add('Relief');
-        }
+            // Add special features
+            if (daylily.sculpting) {
+                tags.add('Sculpted');
 
-        // Add fragrance tag
-        if (daylily.fragrance) {
-            tags.add('Fragrant');
-        }
-    });
+                const sculptingText = daylily.sculpting.toLowerCase();
+                if (sculptingText.includes('cristate')) tags.add('Cristate');
+                if (sculptingText.includes('relief')) tags.add('Relief');
+            }
 
-    return Array.from(tags).sort();
+            // Add fragrance tag
+            if (daylily.fragrance) {
+                tags.add('Fragrant');
+            }
+        });
+
+        // Store in cache
+        tagsCache = Array.from(tags).sort();
+        return tagsCache;
+    } catch (error) {
+        console.error('Error getting all tags:', error);
+        return [];
+    }
 }
