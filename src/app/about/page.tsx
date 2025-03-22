@@ -129,7 +129,10 @@ export default function AboutPage() {
                                 All sales are conducted via email or in-person. Contact us for current availability and pricing.
                             </p>
                             <ul className="list-none space-y-2 pl-0 pt-1 mt-1">
-                                <li>• Shipping: $12.00 for first plant plus $3.00 per each additional plant. Domestic shipping only. </li>
+                                <li>• All plants are sold as Double Fans, sometimes more</li>
+                                <li>• Shipping: $12.00 for first plant plus $3.00 per each additional plant. Domestic
+                                    shipping only.
+                                </li>
                                 <li>• We can only ship to mainland United States</li>
                                 <li>• Cash or check preferred</li>
                                 <li>• Located in AHS/ADS Region 10</li>
