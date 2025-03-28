@@ -13,16 +13,16 @@ export const metadata: Metadata = {
         default: 'Rice Daylilies - Award-Winning Daylily Breeder in Kentucky',
     },
     description: 'Award-winning daylily hybridizers in Kentucky with over 25 years of breeding exceptional daylilies. Browse our collection of Northern-hardy daylilies.',
-    keywords: 'daylilies, hemerocallis, Kentucky daylily breeder, daylily hybridizer, Rice daylilies',
+    keywords: 'daylilies, hemerocallis, Kentucky daylily breeder, daylily hybridizer, Rice daylilies, Thoroughbred daylilies',
     authors: [{ name: 'John and Annette Rice' }],
     creator: 'John Rice',
     alternates: {
-        canonical: 'https://ricedaylilies.com',
+        canonical: 'https://ricedaylilies.hemeroholics.com',
     },
     openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: 'https://ricedaylilies.com',
+        url: 'https://ricedaylilies.hemeroholics.com',
         siteName: 'Rice Daylilies',
         title: 'Rice Daylilies - Award-Winning Daylily Breeder in Kentucky',
         description: 'Award-winning daylily hybridizers in Kentucky with over 25 years of breeding exceptional daylilies. Browse our collection of Northern-hardy daylilies.',
@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     "@context": "https://schema.org",
                     "@type": "PlantNursery",
                     "name": "Rice Daylilies",
-                    "url": "https://ricedaylilies.com",
+                    "url": "https://ricedaylilies.hemeroholics.com",
                     "telephone": "(859) 435-0000",
                     "address": {
                         "@type": "PostalAddress",
@@ -61,8 +61,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     },
                     "geo": {
                         "@type": "GeoCoordinates",
-                        "latitude": 38.123456,  // Replace with actual coordinates
-                        "longitude": -84.123456
+                        "latitude": 38.084405,  // Replace with actual coordinates
+                        "longitude": 84.277545
                     },
                     "openingHoursSpecification": {
                         "@type": "OpeningHoursSpecification",
@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         "opens": "09:00",
                         "closes": "17:00"
                     },
-                    "description": "Award-winning daylily breeder in Kentucky's Bourbon County with over 25 years of experience perfecting exceptional daylilies."
+                    "description": "Award-winning daylily breeder in Kentucky's Bourbon County with over 25 years of experience perfecting exceptional thoroughbred daylilies."
                 })
             }}
         />
