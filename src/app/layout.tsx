@@ -27,6 +27,7 @@ export const metadata: Metadata = {
         title: 'Rice Daylilies - Award-Winning Daylily Breeder in Kentucky',
         description: 'Award-winning daylily hybridizers in Kentucky with over 25 years of breeding exceptional daylilies. Browse our collection of Northern-hardy daylilies.',
     },
+    robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
