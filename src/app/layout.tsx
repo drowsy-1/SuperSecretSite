@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Providers } from './providers';
+import { Providers } from './Providers';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import './globals.css';
 
