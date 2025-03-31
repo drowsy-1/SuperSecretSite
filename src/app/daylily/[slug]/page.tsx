@@ -21,7 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!daylily) {
         return {
-            title: 'Daylily Not Found | Rice Daylilies'
+            title: 'Daylily Not Found | Rice Daylilies',
+            robots: { index: true, follow: true }
         };
     }
 
@@ -43,297 +44,284 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             ],
             type: 'website',
         },
+        robots: { index: true, follow: true }
     };
 }
 
 export default async function DaylilyPage({ params }: Props) {
-    try {
-        const daylily = await getDaylily(params.slug);
+    const daylily = await getDaylily(params.slug);
 
-        if (!daylily) {
-            notFound();
-        }
+    if (!daylily) {
+        notFound();
+    }
 
-        // Add extra safety checks
-        if (!daylily.image_url) {
-            daylily.image_url = 'placeholder.jpg'; // Use a fallback image
-        }
+    // Add extra safety checks
+    const imagePath = daylily.image_url || 'placeholder.jpg';
 
-        // Generate tags for this daylily
-        const tags = generateTags(daylily);
+    // Generate tags for this daylily
+    const tags = generateTags(daylily);
 
-        // Get related daylilies (same hybridizer, or similar color)
-        const relatedDaylilies = await getRelatedDaylilies(daylily);
+    // Get related daylilies (same hybridizer, or similar color)
+    const relatedDaylilies = await getRelatedDaylilies(daylily);
 
-        return (
-            <div className="container mx-auto px-4 py-8">
-                {/* Back link */}
-                <Link href="/" className="inline-flex items-center mb-6 text-primary hover:text-primary/80">
-                    <ArrowLeft className="h-4 w-4 mr-1" />
-                    Back to Gallery
-                </Link>
+    return (
+        <div className="container mx-auto px-4 py-8">
+            {/* Back link */}
+            <Link href="/" className="inline-flex items-center mb-6 text-primary hover:text-primary/80">
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back to Gallery
+            </Link>
 
-                {/* Main daylily card with all information */}
-                <Card className="mb-8">
-                    <CardContent className="p-6">
-                        {/* Image container at the top */}
-                        <div className="max-w-xl mx-auto mb-6">
-                            <Card className="overflow-hidden border-0 shadow-md">
-                                <div className="aspect-square relative">
-                                    <ClientImage
-                                        src={getImageUrl(daylily.image_url)}
-                                        alt={daylily.name}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 30vw"
-                                        priority
-                                        className="object-cover"
-                                        unoptimized={true}
-                                    />
-                                </div>
-                            </Card>
+            {/* Main daylily card with all information */}
+            <Card className="mb-8">
+                <CardContent className="p-6">
+                    {/* Image container at the top */}
+                    <div className="max-w-xl mx-auto mb-6">
+                        <Card className="overflow-hidden border-0 shadow-md">
+                            <div className="aspect-square relative">
+                                <ClientImage
+                                    src={getImageUrl(imagePath)}
+                                    alt={daylily.name}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 30vw"
+                                    priority
+                                    className="object-cover"
+                                    unoptimized={true}
+                                />
+                            </div>
+                        </Card>
+                    </div>
+
+                    {/* Daylily header information */}
+                    <div className="text-center mb-6">
+                        <div className="flex items-center justify-center gap-4 flex-wrap">
+                            <h1 className="text-3xl font-bold">{daylily.name}</h1>
+                            {daylily.price && (
+                                <p className="text-2xl font-medium text-green-600 dark:text-green-400">
+                                    ${daylily.price}
+                                </p>
+                            )}
                         </div>
 
-                        {/* Daylily header information */}
-                        <div className="text-center mb-6">
-                            <div className="flex items-center justify-center gap-4 flex-wrap">
-                                <h1 className="text-3xl font-bold">{daylily.name}</h1>
-                                {daylily.price && (
-                                    <p className="text-2xl font-medium text-green-600 dark:text-green-400">
-                                        ${daylily.price}
-                                    </p>
-                                )}
-                            </div>
+                        <p className="text-lg text-muted-foreground mt-2">
+                            {daylily.hybridizer} ({daylily.year})
+                        </p>
 
-                            <p className="text-lg text-muted-foreground mt-2">
-                                {daylily.hybridizer} ({daylily.year})
-                            </p>
-
-                            <div className="flex flex-wrap gap-2 justify-center mt-4">
-                                {tags.map(tag => (
-                                    <Link
-                                        key={tag}
-                                        href={`/category/${encodeURIComponent(tag)}`}
-                                        className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm hover:bg-secondary/80 transition-colors"
-                                    >
-                                        {tag}
-                                    </Link>
-                                ))}
-                            </div>
-
-
-                            <div className="mt-4">
-                                <a
-                                    href={`mailto:daylilycat68@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
-                                    className="inline-block"
+                        <div className="flex flex-wrap gap-2 justify-center mt-4">
+                            {tags.map(tag => (
+                                <Link
+                                    key={tag}
+                                    href={`/category/${encodeURIComponent(tag)}`}
+                                    className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm hover:bg-secondary/80 transition-colors"
                                 >
-                                    <Button className="gap-2">
-                                        <Mail className="h-4 w-4"/>
-                                        <span>{daylily.availability || "Email For Availability"}</span>
-                                    </Button>
-                                </a>
-                            </div>
+                                    {tag}
+                                </Link>
+                            ))}
                         </div>
 
-                        <div className="border-t my-6"></div>
 
-                        {/* Characteristics section */}
-                        <div className="mb-8">
-                            <h2 className="text-xl font-semibold mb-4">Characteristics</h2>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2">
-                                <div>
-                                    <span className="font-medium">Ploidy:</span> {daylily.ploidy}
-                                </div>
-                                <div>
-                                    <span className="font-medium">Bloom Size:</span> {daylily.bloom_size}
-                                </div>
-                                <div>
-                                    <span className="font-medium">Scape Height:</span> {daylily.scape_height}
-                                </div>
-                                <div>
-                                    <span className="font-medium">Bloom Season:</span> {daylily.bloom_season}
-                                </div>
-                                <div>
-                                    <span className="font-medium">Foliage Type:</span> {daylily.foliage_type}
-                                </div>
-                                {daylily.branches && (
-                                    <div>
-                                        <span className="font-medium">Branches:</span> {daylily.branches}
-                                    </div>
-                                )}
-                                {daylily.bud_count && (
-                                    <div>
-                                        <span className="font-medium">Bud Count:</span> {daylily.bud_count}
-                                    </div>
-                                )}
-                                {daylily.fragrance && (
-                                    <div>
-                                        <span className="font-medium">Fragrance:</span> {daylily.fragrance}
-                                    </div>
-                                )}
-                                {daylily.bloom_habit && (
-                                    <div>
-                                        <span className="font-medium">Bloom Habit:</span> {daylily.bloom_habit}
-                                    </div>
-                                )}
-                                {daylily.form && (
-                                    <div>
-                                        <span className="font-medium">Form:</span> {daylily.form}
-                                    </div>
-                                )}
-                                {daylily.sculpting && (
-                                    <div>
-                                        <span className="font-medium">Sculpting:</span> {daylily.sculpting}
-                                    </div>
-                                )}
-                            </div>
+                        <div className="mt-4">
+                            <a
+                                href={`mailto:daylilycat68@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
+                                className="inline-block"
+                            >
+                                <Button className="gap-2">
+                                    <Mail className="h-4 w-4"/>
+                                    <span>{daylily.availability || "Email For Availability"}</span>
+                                </Button>
+                            </a>
                         </div>
+                    </div>
 
-                        <div className="border-t my-6"></div>
+                    <div className="border-t my-6"></div>
 
-                        {/* Details section */}
-                        <div>
-                            <h2 className="text-xl font-semibold mb-4">Details</h2>
-                            <div className="space-y-4">
-                                {daylily.color_description && (
-                                    <div>
-                                        <h3 className="text-md font-semibold mb-1">Color</h3>
-                                        <p>{daylily.color_description}</p>
-                                    </div>
-                                )}
-                                {daylily.parentage && (
-                                    <div>
-                                        <h3 className="text-md font-semibold mb-1">Parentage</h3>
-                                        <p>{daylily.parentage}</p>
-                                    </div>
-                                )}
-                                {daylily["seedling_#"] && (
-                                    <div>
-                                        <h3 className="text-md font-semibold mb-1">Seedling #</h3>
-                                        <p>{daylily["seedling_#"]}</p>
-                                    </div>
-                                )}
-                                {daylily.notes && (
-                                    <div>
-                                        <h3 className="text-md font-semibold mb-1">Notes</h3>
-                                        <p>{daylily.notes}</p>
-                                    </div>
-                                )}
-                                {daylily.description && (
-                                    <div>
-                                        <h3 className="text-md font-semibold mb-1">Description</h3>
-                                        <p className="whitespace-pre-line">
-                                            {daylily.description}
-                                        </p>
-                                    </div>
-                                )}
-                                {daylily.learn_more_url && (
-                                    <div className="mt-4">
-                                        <a
-                                            href={daylily.learn_more_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring h-9 px-4 py-2 bg-primary text-primary-foreground shadow hover:bg-primary/90"
-                                        >
-                                            Learn More
-                                        </a>
-                                    </div>
-                                )}
+                    {/* Characteristics section */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-semibold mb-4">Characteristics</h2>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2">
+                            <div>
+                                <span className="font-medium">Ploidy:</span> {daylily.ploidy}
                             </div>
+                            <div>
+                                <span className="font-medium">Bloom Size:</span> {daylily.bloom_size}
+                            </div>
+                            <div>
+                                <span className="font-medium">Scape Height:</span> {daylily.scape_height}
+                            </div>
+                            <div>
+                                <span className="font-medium">Bloom Season:</span> {daylily.bloom_season}
+                            </div>
+                            <div>
+                                <span className="font-medium">Foliage Type:</span> {daylily.foliage_type}
+                            </div>
+                            {daylily.branches && (
+                                <div>
+                                    <span className="font-medium">Branches:</span> {daylily.branches}
+                                </div>
+                            )}
+                            {daylily.bud_count && (
+                                <div>
+                                    <span className="font-medium">Bud Count:</span> {daylily.bud_count}
+                                </div>
+                            )}
+                            {daylily.fragrance && (
+                                <div>
+                                    <span className="font-medium">Fragrance:</span> {daylily.fragrance}
+                                </div>
+                            )}
+                            {daylily.bloom_habit && (
+                                <div>
+                                    <span className="font-medium">Bloom Habit:</span> {daylily.bloom_habit}
+                                </div>
+                            )}
+                            {daylily.form && (
+                                <div>
+                                    <span className="font-medium">Form:</span> {daylily.form}
+                                </div>
+                            )}
+                            {daylily.sculpting && (
+                                <div>
+                                    <span className="font-medium">Sculpting:</span> {daylily.sculpting}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="border-t my-6"></div>
+
+                    {/* Details section */}
+                    <div>
+                        <h2 className="text-xl font-semibold mb-4">Details</h2>
+                        <div className="space-y-4">
+                            {daylily.color_description && (
+                                <div>
+                                    <h3 className="text-md font-semibold mb-1">Color</h3>
+                                    <p>{daylily.color_description}</p>
+                                </div>
+                            )}
+                            {daylily.parentage && (
+                                <div>
+                                    <h3 className="text-md font-semibold mb-1">Parentage</h3>
+                                    <p>{daylily.parentage}</p>
+                                </div>
+                            )}
+                            {daylily["seedling_#"] && (
+                                <div>
+                                    <h3 className="text-md font-semibold mb-1">Seedling #</h3>
+                                    <p>{daylily["seedling_#"]}</p>
+                                </div>
+                            )}
+                            {daylily.notes && (
+                                <div>
+                                    <h3 className="text-md font-semibold mb-1">Notes</h3>
+                                    <p>{daylily.notes}</p>
+                                </div>
+                            )}
+                            {daylily.description && (
+                                <div>
+                                    <h3 className="text-md font-semibold mb-1">Description</h3>
+                                    <p className="whitespace-pre-line">
+                                        {daylily.description}
+                                    </p>
+                                </div>
+                            )}
+                            {daylily.learn_more_url && (
+                                <div className="mt-4">
+                                    <a
+                                        href={daylily.learn_more_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring h-9 px-4 py-2 bg-primary text-primary-foreground shadow hover:bg-primary/90"
+                                    >
+                                        Learn More
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Related daylilies in separate card */}
+            {relatedDaylilies.length > 0 && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>You Might Also Like</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {relatedDaylilies.map(related => (
+                                <Link
+                                    key={related.name}
+                                    href={`/daylily/${createSlugFromName(related.name)}`}
+                                    className="block group"
+                                >
+                                    <div className="aspect-square relative rounded-lg overflow-hidden">
+                                        <ClientImage
+                                            src={getImageUrl(related.image_url)}
+                                            alt={related.name}
+                                            fill
+                                            sizes="(max-width: 768px) 50vw, 25vw"
+                                            className="object-cover transition-transform group-hover:scale-105"
+                                        />
+                                    </div>
+                                    <p className="mt-2 font-medium text-sm truncate group-hover:text-primary transition-colors">
+                                        {related.name}
+                                    </p>
+                                </Link>
+                            ))}
                         </div>
                     </CardContent>
                 </Card>
+            )}
 
-                {/* Related daylilies in separate card */}
-                {relatedDaylilies.length > 0 && (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>You Might Also Like</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {relatedDaylilies.map(related => (
-                                    <Link
-                                        key={related.name}
-                                        href={`/daylily/${createSlugFromName(related.name)}`}
-                                        className="block group"
-                                    >
-                                        <div className="aspect-square relative rounded-lg overflow-hidden">
-                                            <ClientImage
-                                                src={getImageUrl(related.image_url)}
-                                                alt={related.name}
-                                                fill
-                                                sizes="(max-width: 768px) 50vw, 25vw"
-                                                className="object-cover transition-transform group-hover:scale-105"
-                                            />
-                                        </div>
-                                        <p className="mt-2 font-medium text-sm truncate group-hover:text-primary transition-colors">
-                                            {related.name}
-                                        </p>
-                                    </Link>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-                )}
-
-                {/* Schema markup */}
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify({
-                            "@context": "https://schema.org/",
-                            "@type": "Product",
-                            "name": daylily.name,
-                            "image": `https://ricedaylilies.hemeroholics.com${getImageUrl(daylily.image_url)}`,
-                            "description": daylily.description || daylily.color_description,
-                            "sku": daylily["seedling_#"] || daylily.name.replace(/\s+/g, '-').toLowerCase(),
-                            "brand": {
-                                "@type": "Brand",
+            {/* Schema markup */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org/",
+                        "@type": "Product",
+                        "name": daylily.name,
+                        "image": `https://ricedaylilies.hemeroholics.com${getImageUrl(daylily.image_url)}`,
+                        "description": daylily.description || daylily.color_description,
+                        "sku": daylily["seedling_#"] || daylily.name.replace(/\s+/g, '-').toLowerCase(),
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "Rice Daylilies"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "priceCurrency": "USD",
+                            "price": daylily.price || "0.00",
+                            "availability": daylily.availability?.toLowerCase().includes("stock")
+                                ? "https://schema.org/InStock"
+                                : "https://schema.org/OutOfStock",
+                            "seller": {
+                                "@type": "Organization",
                                 "name": "Rice Daylilies"
-                            },
-                            "offers": {
-                                "@type": "Offer",
-                                "priceCurrency": "USD",
-                                "price": daylily.price || "0.00",
-                                "availability": daylily.availability?.toLowerCase().includes("stock")
-                                    ? "https://schema.org/InStock"
-                                    : "https://schema.org/OutOfStock",
-                                "seller": {
-                                    "@type": "Organization",
-                                    "name": "Rice Daylilies"
-                                }
                             }
-                        })
-                    }}
-                />
-            </div>
-        );
-    } catch (error) {
-        console.error(`Error rendering daylily page for slug: ${params.slug}`, error);
-        return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-2xl font-bold text-red-500">Error Loading Daylily</h1>
-                    <p>There was a problem loading this daylily. Please try again later.</p>
-                    <Link href="/" className="text-blue-500 hover:underline mt-4 inline-block">
-                        Return to Gallery
-                    </Link>
-                </div>
-            </div>
-        );
-    }
+                        }
+                    })
+                }}
+            />
+        </div>
+    );
 }
 
 // Generate all possible paths at build time
 export async function generateStaticParams() {
-    const daylilies = await getAllDaylilies();
+    try {
+        const daylilies = await getAllDaylilies();
 
-    return daylilies.map((daylily) => ({
-        slug: createSlugFromName(daylily.name),
-    }));
+        return daylilies.map((daylily) => ({
+            slug: createSlugFromName(daylily.name),
+        }));
+    } catch (error) {
+        console.error("Error generating static params:", error);
+        return [];
+    }
 }
-
-// This is a partial update focusing on the tag generation and tag linking in the daylily slug page
 
 // Helper function to generate tags for a daylily
 function generateTags(daylily: Daylily): string[] {
@@ -401,7 +389,7 @@ function generateTags(daylily: Daylily): string[] {
         tags.push('Fragrant');
     }
 
-    // Remove duplicates using Array.from instead of spread operator
+    // Remove duplicates
     return Array.from(new Set(tags));
 }
 
@@ -409,13 +397,11 @@ function generateTags(daylily: Daylily): string[] {
 async function getRelatedDaylilies(daylily: Daylily): Promise<Daylily[]> {
     try {
         const allDaylilies = await getAllDaylilies();
-        const related: Set<Daylily> = new Set(); // Use a Set to prevent duplicates
+        const related: Daylily[] = []; // Use array instead of Set
+        const usedNames = new Set<string>();
 
-        // Safety check
-        if (!daylily) {
-            console.error("Trying to get related daylilies for null/undefined daylily");
-            return [];
-        }
+        // Add current daylily name
+        usedNames.add(daylily.name);
 
         // First try to find daylilies by the same hybridizer
         const sameHybridizer = allDaylilies.filter(d =>
@@ -437,45 +423,46 @@ async function getRelatedDaylilies(daylily: Daylily): Promise<Daylily[]> {
 
         // Shuffle hybridizer matches and add up to 2
         if (sameHybridizer.length > 0) {
-            // Shuffle to get random ones
-            const shuffledHybridizer = [...sameHybridizer].sort(() => Math.random() - 0.5);
+            // Shuffle to get random ones (using a more stable method)
+            const shuffledHybridizer = [...sameHybridizer].sort(() => 0.5 - Math.random());
 
             for (let i = 0; i < Math.min(2, shuffledHybridizer.length); i++) {
-                related.add(shuffledHybridizer[i]);
+                if (!usedNames.has(shuffledHybridizer[i].name)) {
+                    related.push(shuffledHybridizer[i]);
+                    usedNames.add(shuffledHybridizer[i].name);
+                }
             }
         }
 
         // Shuffle color matches and add up to the limit (4 total)
         if (similarColors.length > 0) {
             // Shuffle to get random ones
-            const shuffledColors = [...similarColors].sort(() => Math.random() - 0.5);
+            const shuffledColors = [...similarColors].sort(() => 0.5 - Math.random());
 
-            for (let i = 0; i < shuffledColors.length && related.size < 4; i++) {
-                related.add(shuffledColors[i]);
+            for (let i = 0; i < shuffledColors.length && related.length < 4; i++) {
+                if (!usedNames.has(shuffledColors[i].name)) {
+                    related.push(shuffledColors[i]);
+                    usedNames.add(shuffledColors[i].name);
+                }
             }
         }
 
         // If we still need more, add random ones from remaining daylilies
-        if (related.size < 4) {
-            const usedNames = new Set();
-            // Add current daylily name and all related daylily names to the set
-            usedNames.add(daylily.name);
-            for (const item of related) {
-                usedNames.add(item.name);
-            }
-
+        if (related.length < 4) {
             const remainingDaylilies = allDaylilies.filter(d => !usedNames.has(d.name));
 
             // Shuffle remaining daylilies
-            const shuffledRemaining = [...remainingDaylilies].sort(() => Math.random() - 0.5);
+            const shuffledRemaining = [...remainingDaylilies].sort(() => 0.5 - Math.random());
 
-            for (let i = 0; i < shuffledRemaining.length && related.size < 4; i++) {
-                related.add(shuffledRemaining[i]);
+            for (let i = 0; i < shuffledRemaining.length && related.length < 4; i++) {
+                if (!usedNames.has(shuffledRemaining[i].name)) {
+                    related.push(shuffledRemaining[i]);
+                    usedNames.add(shuffledRemaining[i].name);
+                }
             }
         }
 
-        // Convert Set to Array without using spread operator
-        return Array.from(related);
+        return related;
     } catch (error) {
         console.error("Error getting related daylilies:", error);
         return []; // Return empty array on error

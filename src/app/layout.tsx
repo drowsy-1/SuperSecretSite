@@ -1,6 +1,7 @@
+// src/app/layout.tsx
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Providers } from './Providers';
+import { Providers } from './providers';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import './globals.css';
 
@@ -26,15 +27,50 @@ export const metadata: Metadata = {
         siteName: 'Rice Daylilies',
         title: 'Rice Daylilies - Award-Winning Daylily Breeder in Kentucky',
         description: 'Award-winning daylily hybridizers in Kentucky with over 25 years of breeding exceptional daylilies. Browse our collection of Northern-hardy daylilies.',
+        images: [
+            {
+                url: 'https://ricedaylilies.hemeroholics.com/assets/Garden_7-22-20.jpg',
+                width: 1200,
+                height: 630,
+                alt: 'Rice Daylilies Garden'
+            }
+        ]
     },
-    robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+    robots: {
+        index: true,
+        follow: true,
+        nocache: false,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+        }
+    },
+    verification: {
+        // Add Google Search Console verification if you have it
+        google: 'your-google-site-verification-code', // You'll need to replace this with your actual code
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Rice Daylilies - Award-Winning Daylily Breeder in Kentucky',
+        description: 'Award-winning daylily hybridizers in Kentucky with over 25 years of breeding exceptional daylilies.',
+        images: ['https://ricedaylilies.hemeroholics.com/assets/Garden_7-22-20.jpg'],
+    }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning>
         <head>
-            {/* Any additional head elements */}
+            {/* Explicitly add indexing meta tags to override any injected ones */}
+            <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+            <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+            {/* Add preconnect for performance */}
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         </head>
         <body className={inter.className}>
         {/* Replace with your actual Google Analytics measurement ID */}
@@ -62,7 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     },
                     "geo": {
                         "@type": "GeoCoordinates",
-                        "latitude": 38.084405,  // Replace with actual coordinates
+                        "latitude": 38.084405,
                         "longitude": 84.277545
                     },
                     "openingHoursSpecification": {

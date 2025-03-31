@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Host
+Host: https://ricedaylilies.hemeroholics.com
+
+# Sitemaps
+Sitemap: https://ricedaylilies.hemeroholics.com/sitemap.xml

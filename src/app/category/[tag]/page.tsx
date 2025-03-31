@@ -1,6 +1,6 @@
 // src/app/category/[tag]/page.tsx
 import Link from 'next/link';
-import { ArrowLeft, Sun, Moon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 import { getDayliliesByTag, getAllTags } from '@/lib/daylily-data';
 import { getImageUrl } from '@/lib/constants';
@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             description: `Browse our collection of ${tag.toLowerCase()} daylilies bred by John and Annette Rice in Kentucky.`,
             type: 'website',
         },
+        robots: { index: true, follow: true }
     };
 }
 
@@ -34,59 +35,6 @@ export default async function CategoryPage({ params }: Props) {
 
     // Find related categories that might interest someone viewing this category
     const relatedCategories = getRelatedCategories(tag);
-
-    // Helper function to get related categories
-    function getRelatedCategories(currentTag: string): string[] {
-        // Define category relationships
-        const categoryRelationships: Record<string, string[]> = {
-            // Color relationships
-            'Purple': ['Lavender', 'Blue', 'Eye', 'Watermark'],
-            'Lavender': ['Purple', 'Blue', 'Pink', 'Eye'],
-            'Blue': ['Lavender', 'Purple', 'Eye', 'Green Throat'],
-            'Pink': ['Lavender', 'Red', 'Cream', 'Watermark'],
-            'Red': ['Pink', 'Orange', 'Edge'],
-            'Yellow': ['Cream', 'Orange', 'Green Throat'],
-            'Orange': ['Red', 'Yellow', 'Edge'],
-            'Cream': ['Yellow', 'White', 'Pink'],
-            'White': ['Cream', 'Green Throat', 'Edge'],
-
-            // Pattern relationships
-            'Eye': ['Watermark', 'Purple', 'Lavender', 'Blue'],
-            'Edge': ['Orange', 'Red', 'White', 'Yellow'],
-            'Watermark': ['Eye', 'Purple', 'Lavender'],
-            'Green Throat': ['Blue', 'Yellow', 'White'],
-
-            // Form relationships
-            'Unusual Form': ['Spider', 'Crispate', 'Cascade'],
-            'Spider': ['Unusual Form', 'Crispate'],
-            'Crispate': ['Spider', 'Unusual Form', 'Cascade'],
-            'Cascade': ['Crispate', 'Unusual Form'],
-
-            // Ploidy relationships
-            'Diploid': ['Tetraploid', 'Cristate', 'Unusual Form'],
-            'Tetraploid': ['Diploid', 'Edge', 'Relief'],
-
-            // Foliage relationships
-            'Dormant': ['Semi-Evergreen', 'Early', 'Late'],
-            'Evergreen': ['Semi-Evergreen', 'Rebloomer'],
-            'Semi-Evergreen': ['Dormant', 'Evergreen'],
-
-            // Season relationships
-            'Early': ['Midseason', 'Dormant'],
-            'Midseason': ['Early', 'Late'],
-            'Late': ['Midseason', 'Rebloomer'],
-            'Rebloomer': ['Late', 'Evergreen', 'Semi-Evergreen'],
-
-            // Special features
-            'Sculpted': ['Cristate', 'Relief', 'Unusual Form'],
-            'Cristate': ['Sculpted', 'Diploid', 'Unusual Form'],
-            'Relief': ['Sculpted', 'Tetraploid'],
-            'Fragrant': ['Rebloomer', 'Cream', 'Yellow']
-        };
-
-        // Return up to 4 related categories, or empty array if none defined
-        return (categoryRelationships[currentTag] || []).slice(0, 4);
-    }
 
     return (
         <div className="min-h-screen bg-background flex flex-col">
@@ -181,8 +129,8 @@ export default async function CategoryPage({ params }: Props) {
                                         <p className="text-sm text-muted-foreground">
                                             {daylily.hybridizer} ({daylily.year})
                                         </p>
-                                        <div className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer mt-2">
-                                            <span className="italic group-hover:underline text-sm">
+                                        <div className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer mt-2">
+                                            <span className="italic text-sm">
                                                 {daylily.availability || "Email For Availability"}
                                             </span>
                                         </div>
@@ -208,4 +156,57 @@ export async function generateStaticParams() {
         console.error("Error generating category static params:", error);
         return [];
     }
+}
+
+// Helper function to get related categories
+function getRelatedCategories(currentTag: string): string[] {
+    // Define category relationships
+    const categoryRelationships: Record<string, string[]> = {
+        // Color relationships
+        'Purple': ['Lavender', 'Blue', 'Eye', 'Watermark'],
+        'Lavender': ['Purple', 'Blue', 'Pink', 'Eye'],
+        'Blue': ['Lavender', 'Purple', 'Eye', 'Green Throat'],
+        'Pink': ['Lavender', 'Red', 'Cream', 'Watermark'],
+        'Red': ['Pink', 'Orange', 'Edge'],
+        'Yellow': ['Cream', 'Orange', 'Green Throat'],
+        'Orange': ['Red', 'Yellow', 'Edge'],
+        'Cream': ['Yellow', 'White', 'Pink'],
+        'White': ['Cream', 'Green Throat', 'Edge'],
+
+        // Pattern relationships
+        'Eye': ['Watermark', 'Purple', 'Lavender', 'Blue'],
+        'Edge': ['Orange', 'Red', 'White', 'Yellow'],
+        'Watermark': ['Eye', 'Purple', 'Lavender'],
+        'Green Throat': ['Blue', 'Yellow', 'White'],
+
+        // Form relationships
+        'Unusual Form': ['Spider', 'Crispate', 'Cascade'],
+        'Spider': ['Unusual Form', 'Crispate'],
+        'Crispate': ['Spider', 'Unusual Form', 'Cascade'],
+        'Cascade': ['Crispate', 'Unusual Form'],
+
+        // Ploidy relationships
+        'Diploid': ['Tetraploid', 'Cristate', 'Unusual Form'],
+        'Tetraploid': ['Diploid', 'Edge', 'Relief'],
+
+        // Foliage relationships
+        'Dormant': ['Semi-Evergreen', 'Early', 'Late'],
+        'Evergreen': ['Semi-Evergreen', 'Rebloomer'],
+        'Semi-Evergreen': ['Dormant', 'Evergreen'],
+
+        // Season relationships
+        'Early': ['Midseason', 'Dormant'],
+        'Midseason': ['Early', 'Late'],
+        'Late': ['Midseason', 'Rebloomer'],
+        'Rebloomer': ['Late', 'Evergreen', 'Semi-Evergreen'],
+
+        // Special features
+        'Sculpted': ['Cristate', 'Relief', 'Unusual Form'],
+        'Cristate': ['Sculpted', 'Diploid', 'Unusual Form'],
+        'Relief': ['Sculpted', 'Tetraploid'],
+        'Fragrant': ['Rebloomer', 'Cream', 'Yellow']
+    };
+
+    // Return up to 4 related categories, or empty array if none defined
+    return (categoryRelationships[currentTag] || []).slice(0, 4);
 }
