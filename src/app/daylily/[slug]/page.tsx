@@ -126,7 +126,7 @@ export default async function DaylilyPage({ params }: Props) {
 
                         <div className="mt-4">
                             <a
-                                href={`mailto:daylilycat68@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
+                                href={`mailto:daylilymagic@yahoo.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
                                 className="inline-block"
                             >
                                 <Button className="gap-2">

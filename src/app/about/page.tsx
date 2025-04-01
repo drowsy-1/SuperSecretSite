@@ -6,7 +6,7 @@ import { Mail, Phone, MapPin, Calendar, Info, ExternalLink } from 'lucide-react'
 import Image from 'next/image';
 
 export default function AboutPage() {
-    const emailAddress = 'daylilycat68@gmail.com';
+    const emailAddress = 'daylilymagic@yahoo.com';
     const phoneNumber = '(859) 435-0000';
     const emailSubject = 'Rice Daylilies Inquiry';
     const emailBody = 'Hello, I am interested in learning more about your daylilies.';
