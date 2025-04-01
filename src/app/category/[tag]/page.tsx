@@ -1,6 +1,6 @@
 // src/app/category/[tag]/page.tsx
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Mail } from 'lucide-react';
 import { Metadata } from 'next';
 import { getDayliliesByTag, getAllTags } from '@/lib/daylily-data';
 import { getImageUrl } from '@/lib/constants';
@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { createSlugFromName } from '@/lib/client-utils';
 import ClientImage from '@/components/ClientImage';
+import EmailLink from '@/components/EmailLink';
+
+
 
 type Props = {
     params: { tag: string }
@@ -132,11 +135,8 @@ export default async function CategoryPage({ params }: Props) {
                                         <p className="text-sm text-muted-foreground">
                                             {daylily.hybridizer} ({daylily.year})
                                         </p>
-                                        <div className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer mt-2">
-                                            <span className="italic text-sm">
-                                                {daylily.availability || "Email For Availability"}
-                                            </span>
-                                        </div>
+
+                                        <EmailLink daylily={daylily} />
                                     </CardContent>
                                 </Card>
                             </Link>

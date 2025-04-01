@@ -11,9 +11,6 @@ module.exports = {
                 disallow: ['/api/'],
             },
         ],
-        additionalSitemaps: [
-            `${process.env.NEXT_PUBLIC_BASE_URL || 'https://ricedaylilies.hemeroholics.com'}/sitemap.xml`,
-        ],
     },
     priority: 0.7,
     changefreq: 'weekly',
