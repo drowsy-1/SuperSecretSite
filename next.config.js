@@ -38,37 +38,31 @@ const nextConfig = {
   // Add redirects configuration for canonical URL handling
   async redirects() {
     return [
-      // Redirect www to non-www (assuming you prefer non-www)
+      // HTTP to HTTPS (this one is essential and shouldn't cause loops)
       {
         source: '/:path*',
         has: [
-          {
-            type: 'host',
-            value: 'www.ricedaylilies.hemeroholics.com',
-          },
+          { type: 'header', key: 'x-forwarded-proto', value: 'http' }
         ],
         destination: 'https://ricedaylilies.hemeroholics.com/:path*',
         permanent: true,
       },
-      // Redirect HTTP to HTTPS
+
+      // Handle index.html and other legacy URLs if needed
       {
-        source: '/:path*',
-        has: [
-          {
-            type: 'header',
-            key: 'x-forwarded-proto',
-            value: 'http',
-          },
-        ],
-        destination: 'https://ricedaylilies.hemeroholics.com/:path*',
+        source: '/index.html',
+        destination: '/',
         permanent: true,
       },
-      // Handle any duplicates with trailing slashes (if trailingSlash is false)
+
+      // Normalize trailing slashes based on your trailingSlash setting
+      // Since you have trailingSlash: false, redirect URLs with trailing slashes to non-trailing slash versions
+      // This should not cause loops if implemented correctly
       {
-        source: '/:path*/',
-        destination: '/:path*',
+        source: '/:path+/',
+        destination: '/:path+',
         permanent: true,
-      },
+      }
     ];
   },
 }
