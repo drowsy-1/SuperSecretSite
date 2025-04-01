@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     authors: [{ name: 'John and Annette Rice' }],
     creator: 'John Rice',
     alternates: {
-        canonical: 'https://ricedaylilies.hemeroholics.com',
+        canonical: '/',
     },
     openGraph: {
         type: 'website',

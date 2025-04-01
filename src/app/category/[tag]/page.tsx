@@ -25,6 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             description: `Browse our collection of ${tag.toLowerCase()} daylilies bred by John and Annette Rice in Kentucky.`,
             type: 'website',
         },
+        alternates: {
+            canonical: `/category/${encodeURIComponent(tag)}`,
+        },
         robots: { index: true, follow: true }
     };
 }

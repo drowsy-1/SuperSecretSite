@@ -42,7 +42,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                     alt: daylily.name
                 }
             ],
+
             type: 'website',
+        },
+        alternates: {
+            canonical: `/daylily/${params.slug}`,
         },
         robots: { index: true, follow: true }
     };

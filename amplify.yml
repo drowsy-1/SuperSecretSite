@@ -32,3 +32,20 @@ frontend:
       headers:
         - key: 'X-Robots-Tag'
           value: 'index, follow'
+  customRules:
+    - pattern: '**'
+      status: 200
+      headers:
+        - key: 'Strict-Transport-Security'
+          value: 'max-age=31536000; includeSubDomains'
+        - key: 'X-Content-Type-Options'
+          value: 'nosniff'
+        - key: 'X-XSS-Protection'
+          value: '1; mode=block'
+    - pattern: '**'
+      condition: 'header.X-Forwarded-Host = www.ricedaylilies.hemeroholics.com'
+      status: '301'
+      target: 'https://ricedaylilies.hemeroholics.com/:splat'
+      headers:
+        - key: 'Location'
+          value: 'https://ricedaylilies.hemeroholics.com/:splat'
