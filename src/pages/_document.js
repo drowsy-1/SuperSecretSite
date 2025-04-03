@@ -1,4 +1,3 @@
-// src/pages/_document.js (create if it doesn't exist)
 import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {

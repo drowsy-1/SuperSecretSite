@@ -1,7 +1,7 @@
+// src/components/GoogleAnalytics.tsx
 'use client';
 
 import Script from 'next/script';
-import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 // Declare the gtag function for TypeScript
@@ -17,26 +17,40 @@ declare global {
 }
 
 export default function GoogleAnalytics({ measurementId }: { measurementId: string }) {
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
-    // Track page views when the route changes
+    // Instead of using usePathname and useSearchParams,
+    // we'll use the window object directly on client side
     useEffect(() => {
-        if (pathname && window.gtag) {
-            // Construct the full URL including search params
-            const url = searchParams?.toString()
-                ? `${pathname}?${searchParams.toString()}`
-                : pathname;
+        if (typeof window !== 'undefined') {
+            const handleRouteChange = () => {
+                const url = window.location.pathname + window.location.search;
+                window.gtag('event', 'page_view', {
+                    page_location: window.location.href,
+                    page_path: url,
+                    page_title: document.title,
+                    send_to: measurementId
+                });
+            };
 
-            // Track page view
-            window.gtag('event', 'page_view', {
-                page_location: window.location.href,
-                page_path: url,
-                page_title: document.title,
-                send_to: measurementId
-            });
+            // Track initial page load
+            handleRouteChange();
+
+            // Use history API to detect client-side route changes
+            const originalPushState = window.history.pushState;
+            window.history.pushState = function() {
+                // @ts-ignore - calling original method with 'arguments'
+                originalPushState.apply(this, arguments);
+                handleRouteChange();
+            };
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', handleRouteChange);
+
+            return () => {
+                window.history.pushState = originalPushState;
+                window.removeEventListener('popstate', handleRouteChange);
+            };
         }
-    }, [pathname, searchParams, measurementId]);
+    }, [measurementId]);
 
     // Handle errors for gtag loading
     const handleGtagError = () => {

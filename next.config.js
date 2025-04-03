@@ -65,6 +65,20 @@ const nextConfig = {
       }
     ];
   },
+  // Add this section for robots handling
+  headers: async () => {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+          },
+        ],
+      },
+    ];
+  }
 }
 
 module.exports = nextConfig
