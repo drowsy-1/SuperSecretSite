@@ -130,11 +130,12 @@ export default function AboutPage() {
                             </p>
                             <ul className="list-none space-y-2 pl-0 pt-1 mt-1">
                                 <li>• All plants are sold as Double Fans, sometimes more</li>
-                                <li>• Shipping: $12.00 for first plant plus $3.00 per each additional plant. Domestic
+                                <li>• Shipping: $15.00 for first plant plus $3.00 per each additional plant. Domestic
                                     shipping only.
                                 </li>
                                 <li>• We can only ship to mainland United States</li>
                                 <li>• Cash or check preferred</li>
+                                <li>• Make checks payable to Annette Rice at 6615 Briar Hill Road Paris, KY 40361-9064</li>
                                 <li>• Located in AHS/ADS Region 10</li>
                                 <li>• USDA Zone 6</li>
                             </ul>
