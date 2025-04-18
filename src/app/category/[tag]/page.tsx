@@ -21,10 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const tag = decodeURIComponent(params.tag);
 
     return {
-        title: `${tag} Daylilies | Rice Daylilies`,
+        title: `${tag} Daylily | Rice Daylilies`,
         description: `Browse our collection of ${tag.toLowerCase()} daylilies bred by John and Annette Rice in Kentucky. Award-winning daylily hybridizers with over 25 years experience.`,
         openGraph: {
-            title: `${tag} Daylilies | Rice Daylilies`,
+            title: `${tag} Daylily | Rice Daylilies`,
             description: `Browse our collection of ${tag.toLowerCase()} daylilies bred by John and Annette Rice in Kentucky.`,
             type: 'website',
         },

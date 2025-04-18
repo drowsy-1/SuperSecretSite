@@ -5,6 +5,14 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Calendar, Info, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 
+export const metadata: Metadata = {
+    title: 'About Rice Daylilies',
+    description: 'Learn about Rice Daylilies, award-winning daylily breeders in Kentucky with over 25 years of experience perfecting exceptional daylilies.',
+    alternates: {
+        canonical: '/about',
+    }
+};
+
 export default function AboutPage() {
     const emailAddress = 'daylilymagic@yahoo.com';
     const phoneNumber = '(859) 435-0000';

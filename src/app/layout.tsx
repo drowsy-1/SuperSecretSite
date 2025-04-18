@@ -17,9 +17,7 @@ export const metadata: Metadata = {
     keywords: 'daylilies, hemerocallis, Kentucky daylily breeder, daylily hybridizer, Rice daylilies, Thoroughbred daylilies',
     authors: [{ name: 'John and Annette Rice' }],
     creator: 'John Rice',
-    alternates: {
-        canonical: '/',
-    },
+    // Removed the static canonical URL that was causing issues
     openGraph: {
         type: 'website',
         locale: 'en_US',
