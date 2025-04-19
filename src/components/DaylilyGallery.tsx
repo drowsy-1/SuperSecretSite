@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {Sun, Moon, Mail} from 'lucide-react';
 import { useTheme } from 'next-themes';
