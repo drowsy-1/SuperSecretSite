@@ -14,9 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-    const emailAddress = 'daylilymagic@yahoo.com';
-    const phoneNumber = '(859) 435-0000';
-    const emailSubject = 'Rice Daylilies Inquiry';
+    const emailAddress = 'lovetrinity315@gmail.com';
+    const phoneNumber = '(000) 000-0000';
+    const emailSubject = 'Rice Daylilies Inquiry (redirect)';
     const emailBody = 'Hello, I am interested in learning more about your daylilies.';
 
     return (
@@ -58,6 +58,8 @@ export default function AboutPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="prose dark:prose-invert">
+                            <h1> Attention: this business is no longer active. The site remains up for posterity. </h1>
+                            <p> All emails are forwarded to a brand partner</p>
                             <p>
                                 Welcome to Rice Daylilies, a premier daylily breeding farm in Kentucky's Bourbon County,
                                 where award-winning horticulturalist and Vietnam veteran John Rice and his wife Annette
