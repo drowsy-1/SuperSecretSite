@@ -295,7 +295,7 @@ export default function DaylilyGallery() {
                                         {daylily.hybridizer} ({daylily.year})
                                     </p>
                                     <a
-                                    href={`mailto:lovetrinity315@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
+                                    href={`mailto:personallybored@gmail.com?subject=Variety%20Inquiry%20-%20${encodeURIComponent(daylily.name)}%20&body=I%20am%20interested%20in%20the%20variety%20${encodeURIComponent(daylily.name)}%20.%20Please%20provide%20information%20about%20its%20availability%20and%20pricing.`}
                                     className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
                                     onClick={(e) => e.stopPropagation()} // Prevent Link navigation
                                     >
